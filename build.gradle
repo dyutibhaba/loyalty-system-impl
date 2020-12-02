@@ -19,12 +19,27 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	String lombokVersion = "1.18.12"
+	String springFoxBootStarterVersion = "3.0.0"
+	String hibernateVersion = "6.1.5.Final"
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Development tools
+	compileOnly "org.projectlombok:lombok:$lombokVersion"
+	annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+	developmentOnly "org.springframework.boot:spring-boot-devtools"
+	implementation "io.springfox:springfox-boot-starter:$springFoxBootStarterVersion"
+	implementation "org.hibernate.validator:hibernate-validator:$hibernateVersion"
+
+	// Tests
+	testImplementation "com.jayway.jsonpath:json-path-assert:2.4.0"
+	testImplementation "com.h2database:h2:1.4.200"
+	testImplementation "commons-io:commons-io:2.7"
+	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+		exclude group: "org.junit.vintage", module: "junit-vintage-engine"
+	}
 }
 
 test {

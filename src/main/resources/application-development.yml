@@ -1,0 +1,7 @@
+spring:
+  config:
+    activate:
+      on-profile: development
+
+giftcard:
+  baseId: GC100
