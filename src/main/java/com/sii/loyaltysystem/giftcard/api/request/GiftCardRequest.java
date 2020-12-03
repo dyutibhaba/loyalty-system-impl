@@ -2,6 +2,8 @@ package com.sii.loyaltysystem.giftcard.api.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.sii.loyaltysystem.core.util.GiftCardExpiredDateDeserializer;
 import com.sii.loyaltysystem.giftcard.api.type.CurrencyType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -34,8 +36,8 @@ public class GiftCardRequest {
 
     @NotNull
     @JsonProperty("expiration")
-    //Add exception handling with appropriate validation message
-    @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss")
+    @JsonDeserialize(using = GiftCardExpiredDateDeserializer.class)
     LocalDateTime expiryDate;
 
     @JsonProperty("description")

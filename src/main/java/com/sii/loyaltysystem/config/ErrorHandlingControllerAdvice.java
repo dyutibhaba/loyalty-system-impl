@@ -4,6 +4,7 @@ import com.sii.loyaltysystem.core.api.response.error.ErrorResponse;
 import com.sii.loyaltysystem.core.exception.NoDataFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.time.format.DateTimeParseException;
 
 @RestControllerAdvice
 @Slf4j
@@ -36,7 +38,6 @@ public class ErrorHandlingControllerAdvice {
         pw.close();
 
         log.error("An unexpected error has occurred.", exception);
-
         return errorResponse;
     }
 
@@ -44,13 +45,27 @@ public class ErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ErrorResponse onNoDataFoundException(NoDataFoundException exception) {
-
-        ErrorResponse errorResponse = ErrorResponse.builder()
+        return ErrorResponse.builder()
                 .status(HttpStatus.BAD_REQUEST)
                 .errorMessage(exception.getMessage())
                 .build();
+    }
 
-        return errorResponse;
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorResponse onDateTimeParseException(HttpMessageNotReadableException exception) {
+        ErrorResponse.ErrorResponseBuilder errorResponseBuilder = ErrorResponse.builder().status(HttpStatus.BAD_REQUEST);
+
+        if(exception.getCause().getCause() instanceof DateTimeParseException) {
+            return errorResponseBuilder.errorMessage("Incorrect expiry date format! Supported format is dd.MM.yyyy HH:mm:ss")
+                    .build();
+        }
+        return ErrorResponse.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .errorMessage(exception.getMessage())
+                .build();
     }
 
 }
