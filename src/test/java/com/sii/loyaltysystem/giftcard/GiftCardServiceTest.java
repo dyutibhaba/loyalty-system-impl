@@ -15,8 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static com.sii.loyaltysystem.GiftCardObjectFactory.aGiftCardRequest;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.Collection;
+
 import static com.sii.loyaltysystem.GiftCardObjectFactory.aGiftCard;
+import static com.sii.loyaltysystem.GiftCardObjectFactory.aGiftCardRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -75,6 +80,25 @@ class GiftCardServiceTest {
         assertThat(giftCardDto.getCurrency()).isNotNull();
         assertThat(giftCardDto.getExpiryDate()).isNotNull();
         assertThat(giftCardDto.getGiftCardId()).isEqualTo(FIRST_GIFT_CARD_ID);
+    }
 
+    @Test
+    void shouldReturnActiveGiftCardAndAmountGreaterThanGiven() {
+        //given
+        GiftCardRequest.GiftCardRequestBuilder giftCardRequestBuilder1 = aGiftCardRequest();
+        GiftCardRequest.GiftCardRequestBuilder giftCardRequestBuilder2 = aGiftCardRequest();
+        giftCardRequestBuilder2.expiryDate(LocalDateTime.of(2020, Month.NOVEMBER, 30, 11, 00));
+        giftCardService.addGiftCard(giftCardRequestBuilder1.build());
+        giftCardService.addGiftCard(giftCardRequestBuilder2.build());
+        BigDecimal amount = BigDecimal.valueOf(30.10);
+
+        //when
+        Collection<GiftCardDto> allActiveGiftCards = giftCardService.findAllActiveCards(amount);
+
+        //then
+        assertThat(allActiveGiftCards).isNotNull();
+        assertThat(allActiveGiftCards.size()).isGreaterThanOrEqualTo(1);
+
+        allActiveGiftCards.stream().findFirst().ifPresent(e -> assertThat(e.getExpiryDate()).isAfter(LocalDateTime.now()));
     }
 }

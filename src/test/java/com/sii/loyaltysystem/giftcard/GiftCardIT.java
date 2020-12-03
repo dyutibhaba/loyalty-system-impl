@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.json.JsonContent;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -49,6 +50,13 @@ class GiftCardIT extends LoyaltySystemBaseIT {
 
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        JsonContent<Object> jsonContext = jsonTester().from(responseEntity.getBody());
+        assertThat(jsonContext).isNotNull();
+        assertThat(jsonContext).extractingJsonPathValue("$.data").isNotNull();
+        assertThat(jsonContext).extractingJsonPathStringValue("$.data.giftCardId").isNotBlank();
+        assertThat(jsonContext).extractingJsonPathStringValue("$.data.giftCardId").isEqualTo(FIRST_GIFT_CARD_ID);
+
     }
 
     @Test
@@ -56,7 +64,6 @@ class GiftCardIT extends LoyaltySystemBaseIT {
         //given
         GiftCardDto.GiftCardDtoBuilder giftCardDtoBuilder = aGiftCardDto();
         GiftCardDto giftCardDto = giftCardDtoBuilder.build();
-        //GiftCardService giftCardServiceMock = mock(GiftCardService.class);
 
         //when
         when(giftCardService.findGiftCardById(FIRST_GIFT_CARD_ID)).thenReturn(giftCardDto);
@@ -65,7 +72,8 @@ class GiftCardIT extends LoyaltySystemBaseIT {
         //then
         assertThat(response).isNotNull();
         assertThat(response.getData().getGiftCardId()).isEqualTo(FIRST_GIFT_CARD_ID);
-
     }
+
+
 
 }

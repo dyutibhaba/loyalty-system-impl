@@ -34,7 +34,7 @@ public class GiftCardService {
     public GiftCardResponse addGiftCard(GiftCardRequest giftCardRequest) {
         GiftCard giftCard = buildGiftCard(giftCardRequest);
         if(!giftCardDao.save(giftCard)) {
-            throw new RuntimeException("Could not add gift card to the system!");
+            throw new UnsupportedOperationException("Could not add gift card to the system!");
         }
         return buildGiftCardResponse(giftCard);
     }
