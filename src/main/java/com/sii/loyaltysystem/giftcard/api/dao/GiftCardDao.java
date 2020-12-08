@@ -30,7 +30,7 @@ public class GiftCardDao {
     }
 
     public String findMaxGiftCardId() {
-        if(giftCardStore.isEmpty()) {
+        if (giftCardStore.isEmpty()) {
             return environmentParameters.getGiftCardInitId();
         }
         return giftCardStore.last().getGiftCardId();

@@ -11,15 +11,15 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class LoyaltySystemBaseIT {
 
-	protected final static String URL_API_GIFT_CARD = "/api/loyalty/giftcards/%s";
+    protected final static String URL_API_GIFT_CARD = "/api/loyalty/giftcards/%s";
 
-	@Autowired
-	protected TestRestTemplate restTemplate;
+    @Autowired
+    protected TestRestTemplate restTemplate;
 
-	protected BasicJsonTester jsonTester = new BasicJsonTester(LoyaltySystemBaseIT.class);
+    protected BasicJsonTester jsonTester = new BasicJsonTester(LoyaltySystemBaseIT.class);
 
-	protected BasicJsonTester jsonTester() {
-		return jsonTester;
-	}
+    protected BasicJsonTester jsonTester() {
+        return jsonTester;
+    }
 
 }

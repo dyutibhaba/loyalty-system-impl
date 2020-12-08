@@ -2,8 +2,6 @@ package com.sii.loyaltysystem.core.exception;
 
 public class NoDataFoundException extends RuntimeException {
 
-    private static final long serialVersionUID = 6557770761539359031L;
-
     private static final String NO_FOUND_MESSAGE_PATTERN = "Object not found for id: %s";
 
     public NoDataFoundException(String message) {

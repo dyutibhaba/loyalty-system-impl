@@ -23,20 +23,16 @@ public class ErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ErrorResponse onUnexpectedException(Exception exception) throws IOException {
-
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         exception.printStackTrace(pw);
-
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .errorMessage(exception.getMessage())
                 .stacktrace(sw.toString())
                 .build();
-
         sw.close();
         pw.close();
-
         log.error("An unexpected error has occurred.", exception);
         return errorResponse;
     }
@@ -57,8 +53,7 @@ public class ErrorHandlingControllerAdvice {
     @ResponseBody
     public ErrorResponse onDateTimeParseException(HttpMessageNotReadableException exception) {
         ErrorResponse.ErrorResponseBuilder errorResponseBuilder = ErrorResponse.builder().status(HttpStatus.BAD_REQUEST);
-
-        if(exception.getCause().getCause() instanceof DateTimeParseException) {
+        if (exception.getCause().getCause() instanceof DateTimeParseException) {
             return errorResponseBuilder.errorMessage("Incorrect expiry date format! Supported format is dd.MM.yyyy HH:mm:ss")
                     .build();
         }

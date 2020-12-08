@@ -37,7 +37,6 @@ public class Response<T> {
         private Source source;
         private String title;
         private String detail;
-
         @Value
         public static class Source {
             private String pointer;

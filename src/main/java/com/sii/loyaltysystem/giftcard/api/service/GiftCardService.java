@@ -33,7 +33,7 @@ public class GiftCardService {
 
     public GiftCardResponse addGiftCard(GiftCardRequest giftCardRequest) {
         GiftCard giftCard = buildGiftCard(giftCardRequest);
-        if(!giftCardDao.save(giftCard)) {
+        if (!giftCardDao.save(giftCard)) {
             throw new UnsupportedOperationException("Could not add gift card to the system!");
         }
         return buildGiftCardResponse(giftCard);
@@ -59,7 +59,7 @@ public class GiftCardService {
 
     public Collection<GiftCardDto> findAllGiftCards() {
         Collection<GiftCardDto> giftCards = giftCardDao.findAll();
-        if(giftCards.isEmpty()) {
+        if (giftCards.isEmpty()) {
             throw new NoDataFoundException("The system is empty currently!");
         }
         return giftCards;
@@ -78,7 +78,6 @@ public class GiftCardService {
                 .collect(Collectors.toList());
     }
 
-    //@org.jetbrains.annotations.NotNull
     private Predicate<GiftCardDto> compareAmountPredicate(BigDecimal amount) {
         return e -> (isAmountGreaterThanGiven(e, amount) && isExpiryDateGreaterThanNow(e));
     }

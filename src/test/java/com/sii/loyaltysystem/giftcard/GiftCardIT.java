@@ -75,5 +75,4 @@ class GiftCardIT extends LoyaltySystemBaseIT {
     }
 
 
-
 }

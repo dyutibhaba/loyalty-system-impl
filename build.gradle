@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '2.4.0'
-	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.4.0'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
 }
 
 group = 'com.sii.loyaltysystem'
@@ -9,39 +9,39 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
 
-	String lombokVersion = "1.18.12"
-	String springFoxBootStarterVersion = "3.0.0"
-	String hibernateVersion = "6.1.5.Final"
+    String lombokVersion = "1.18.12"
+    String springFoxBootStarterVersion = "3.0.0"
+    String hibernateVersion = "6.1.5.Final"
 
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	// Development tools
-	compileOnly "org.projectlombok:lombok:$lombokVersion"
-	annotationProcessor "org.projectlombok:lombok:$lombokVersion"
-	developmentOnly "org.springframework.boot:spring-boot-devtools"
-	implementation "io.springfox:springfox-boot-starter:$springFoxBootStarterVersion"
-	implementation "org.hibernate.validator:hibernate-validator:$hibernateVersion"
+    // Development tools
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
+    implementation "io.springfox:springfox-boot-starter:$springFoxBootStarterVersion"
+    implementation "org.hibernate.validator:hibernate-validator:$hibernateVersion"
 
-	// Tests
-	testImplementation "com.jayway.jsonpath:json-path-assert:2.4.0"
-	testImplementation "com.h2database:h2:1.4.200"
-	testImplementation "commons-io:commons-io:2.7"
-	testImplementation("org.springframework.boot:spring-boot-starter-test") {
-		exclude group: "org.junit.vintage", module: "junit-vintage-engine"
-	}
+    // Tests
+    testImplementation "com.jayway.jsonpath:json-path-assert:2.4.0"
+    testImplementation "com.h2database:h2:1.4.200"
+    testImplementation "commons-io:commons-io:2.7"
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: "org.junit.vintage", module: "junit-vintage-engine"
+    }
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

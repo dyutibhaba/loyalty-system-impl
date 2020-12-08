@@ -26,17 +26,16 @@ public class GiftCardController {
 
     private final GiftCardService giftCardService;
 
+    @GetMapping
+    public Response<Collection<GiftCardDto>> getAllGiftCards() {
+        Collection<GiftCardDto> giftCards = giftCardService.findAllGiftCards();
+        return Response.success(giftCards);
+    }
 
     @PostMapping("/add")
     public Response<GiftCardResponse> addGiftCard(@Valid @RequestBody GiftCardRequest giftCard) {
         GiftCardResponse giftCardResponse = giftCardService.addGiftCard(giftCard);
         return Response.success(giftCardResponse);
-    }
-
-    @GetMapping
-    public Response<Collection<GiftCardDto>> getAllGiftCards() {
-        Collection<GiftCardDto> giftCards = giftCardService.findAllGiftCards();
-        return Response.success(giftCards);
     }
 
     @GetMapping("/find/{giftcard_id}")
