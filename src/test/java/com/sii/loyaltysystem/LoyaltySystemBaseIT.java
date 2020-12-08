@@ -11,7 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class LoyaltySystemBaseIT {
 
-    protected final static String URL_API_GIFT_CARD = "/api/loyalty/giftcards/%s";
+    protected final static String URL_API_GIFT_CARD = "/api/v1/loyalty/giftcards";
 
     @Autowired
     protected TestRestTemplate restTemplate;

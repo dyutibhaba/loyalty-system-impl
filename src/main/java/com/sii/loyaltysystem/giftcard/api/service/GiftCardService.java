@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -33,23 +32,20 @@ public class GiftCardService {
 
     public GiftCardResponse addGiftCard(GiftCardRequest giftCardRequest) {
         GiftCard giftCard = buildGiftCard(giftCardRequest);
-        if (!giftCardDao.save(giftCard)) {
-            throw new UnsupportedOperationException("Could not add gift card to the system!");
-        }
+        giftCardDao.save(giftCard);
         return buildGiftCardResponse(giftCard);
     }
 
     private GiftCardResponse buildGiftCardResponse(GiftCard giftCard) {
         return GiftCardResponse.builder()
-                .message("Successfully added!")
+                .message("Gift card successfully added!")
                 .giftCardId(giftCard.getGiftCardId())
                 .build();
     }
 
     private GiftCard buildGiftCard(GiftCardRequest giftCardRequest) {
-        String maxGiftCardId = giftCardDao.findMaxGiftCardId();
         return GiftCard.builder()
-                .giftCardId(giftCardUtil.generateNewGiftCardId(maxGiftCardId))
+                .giftCardId(giftCardUtil.generateNewGiftCardId())
                 .amount(giftCardRequest.getAmount())
                 .currency(CurrencyType.valueOf(giftCardRequest.getCurrency()))
                 .expiryDate(giftCardRequest.getExpiryDate())
@@ -66,27 +62,30 @@ public class GiftCardService {
     }
 
     public GiftCardDto findGiftCardById(String giftCardId) {
-        Optional<GiftCardDto> giftCardOptional = giftCardDao.findOne(giftCardId);
-        return giftCardOptional.orElseThrow(() ->
-                new NoDataFoundException(String.format("No gift card found in the system with id - %s", giftCardId)));
+        return giftCardDao.findOne(giftCardId);
     }
 
-    public Collection<GiftCardDto> findAllActiveCards(BigDecimal amount) {
+    public Collection<GiftCardDto> findAllCardsByAmountAndStatus(BigDecimal amount, String status) {
         Collection<GiftCardDto> giftCards = giftCardDao.findAll();
         return giftCards.stream()
-                .filter(compareAmountPredicate(amount))
+                .filter(compareByAmount(amount))
+                .filter(compareByExpiryStatus(getStatusType(status)))
                 .collect(Collectors.toList());
     }
 
-    private Predicate<GiftCardDto> compareAmountPredicate(BigDecimal amount) {
-        return e -> (isAmountGreaterThanGiven(e, amount) && isExpiryDateGreaterThanNow(e));
+    private StatusType getStatusType(String status) {
+        Optional<StatusType> statusType = StatusType.getStatusType(status);
+        return statusType.orElseThrow(() -> new NoDataFoundException(String.format("Invalid status %s provided", status)));
     }
 
-    private boolean isExpiryDateGreaterThanNow(GiftCardDto e) {
-        return (e.getExpiryDate().compareTo(LocalDateTime.now()) > 0);
+    private Predicate<GiftCardDto> compareByAmount(BigDecimal amount) {
+        return (e -> e.getAmount().compareTo(amount) > 0);
     }
 
-    private boolean isAmountGreaterThanGiven(GiftCardDto giftCardDto, BigDecimal amount) {
-        return (giftCardDto.getAmount().compareTo(amount) > 0);
+    private Predicate<GiftCardDto> compareByExpiryStatus(StatusType status) {
+        if (StatusType.ACTIVE.equals(status)) {
+            return (e -> e.getExpiryDate().compareTo(LocalDateTime.now()) > 0);
+        }
+        return (e -> e.getExpiryDate().compareTo(LocalDateTime.now()) < 0);
     }
 }

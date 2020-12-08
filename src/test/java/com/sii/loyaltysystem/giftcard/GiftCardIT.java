@@ -2,6 +2,7 @@ package com.sii.loyaltysystem.giftcard;
 
 import com.sii.loyaltysystem.LoyaltySystemBaseIT;
 import com.sii.loyaltysystem.core.api.response.Response;
+import com.sii.loyaltysystem.core.util.GiftCardUtil;
 import com.sii.loyaltysystem.env.EnvironmentParameters;
 import com.sii.loyaltysystem.giftcard.api.GiftCardController;
 import com.sii.loyaltysystem.giftcard.api.model.GiftCardDto;
@@ -16,6 +17,8 @@ import org.springframework.boot.test.json.JsonContent;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.UUID;
+
 import static com.sii.loyaltysystem.GiftCardObjectFactory.aGiftCardDto;
 import static com.sii.loyaltysystem.GiftCardObjectFactory.aGiftCardRequest;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,6 +30,8 @@ class GiftCardIT extends LoyaltySystemBaseIT {
     private EnvironmentParameters environmentParameters;
     @Mock
     private GiftCardService giftCardService;
+    @Mock
+    private GiftCardUtil giftCardUtil;
 
     private GiftCardController giftCardController;
 
@@ -43,10 +48,10 @@ class GiftCardIT extends LoyaltySystemBaseIT {
         //given
         GiftCardRequest.GiftCardRequestBuilder giftCardRequestBuilder = aGiftCardRequest();
         GiftCardRequest giftCardRequest = giftCardRequestBuilder.build();
-        String path = "add";
 
         //when
-        ResponseEntity<String> responseEntity = this.restTemplate.postForEntity(String.format(URL_API_GIFT_CARD, path), giftCardRequest, String.class);
+        String giftCardId = UUID.randomUUID().toString();
+        ResponseEntity<String> responseEntity = this.restTemplate.postForEntity(URL_API_GIFT_CARD, giftCardRequest, String.class);
 
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -55,8 +60,6 @@ class GiftCardIT extends LoyaltySystemBaseIT {
         assertThat(jsonContext).isNotNull();
         assertThat(jsonContext).extractingJsonPathValue("$.data").isNotNull();
         assertThat(jsonContext).extractingJsonPathStringValue("$.data.giftCardId").isNotBlank();
-        assertThat(jsonContext).extractingJsonPathStringValue("$.data.giftCardId").isEqualTo(FIRST_GIFT_CARD_ID);
-
     }
 
     @Test

@@ -15,13 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.math.BigDecimal;
 import java.util.Collection;
 
 @Slf4j
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/loyalty/giftcards")
+@RequestMapping("/api/v1/loyalty/giftcards")
 public class GiftCardController {
 
     private final GiftCardService giftCardService;
@@ -32,21 +33,21 @@ public class GiftCardController {
         return Response.success(giftCards);
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public Response<GiftCardResponse> addGiftCard(@Valid @RequestBody GiftCardRequest giftCard) {
         GiftCardResponse giftCardResponse = giftCardService.addGiftCard(giftCard);
         return Response.success(giftCardResponse);
     }
 
-    @GetMapping("/find/{giftcard_id}")
+    @GetMapping("/{giftcard_id}")
     public Response<GiftCardDto> getGiftCard(@PathVariable("giftcard_id") String giftCardId) {
         GiftCardDto giftCard = giftCardService.findGiftCardById(giftCardId);
         return Response.success(giftCard);
     }
 
-    @GetMapping("/find-all-active/amount/{amount}")
-    public Response<Collection<GiftCardDto>> getAllActiveGiftCards(@PathVariable("amount") String amount) {
-        Collection<GiftCardDto> giftCards = giftCardService.findAllActiveCards(new BigDecimal(amount));
+    @GetMapping("/")
+    public Response<Collection<GiftCardDto>> getAllActiveGiftCards(@PathParam("amount") String amount, @PathParam("status") String status) {
+        Collection<GiftCardDto> giftCards = giftCardService.findAllCardsByAmountAndStatus(new BigDecimal(amount), status);
         return Response.success(giftCards);
     }
 
