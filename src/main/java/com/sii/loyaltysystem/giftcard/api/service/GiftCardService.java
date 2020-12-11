@@ -8,6 +8,7 @@ import com.sii.loyaltysystem.giftcard.api.model.GiftCardDto;
 import com.sii.loyaltysystem.giftcard.api.request.GiftCardRequest;
 import com.sii.loyaltysystem.giftcard.api.response.GiftCardResponse;
 import com.sii.loyaltysystem.giftcard.api.type.CurrencyType;
+import com.sii.loyaltysystem.giftcard.api.type.StatusType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
