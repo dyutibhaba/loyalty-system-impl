@@ -19,6 +19,10 @@ import javax.websocket.server.PathParam;
 import java.math.BigDecimal;
 import java.util.Collection;
 
+/**
+ * Loyalty system API, exposes 3 endpoints that operates on a single resource i.e., product.
+ */
+
 @Slf4j
 @RestController
 @AllArgsConstructor
